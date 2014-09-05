@@ -1,6 +1,7 @@
 <?php
 namespace Devedge\XmlRpc\Server;
 
+use Devedge\XmlRpc\Server;
 use PHPUnit_Framework_TestCase;
 
 class Servertest extends PHPUnit_Framework_TestCase
@@ -21,14 +22,10 @@ class Servertest extends PHPUnit_Framework_TestCase
         $server->handle("no valid xml here");
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage could not parse request
-     */
     public function testHandleInvalidXmlNoException()
     {
         $server = new Server();
         $server->exceptionOnError = false;
-        $this->assertEquals("", $server->handle("no valid xml here"));
+        $this->assertEquals("<?xml version=\"1.0\"?>\n<methodResponse><fault><value><struct><member><name>faultCode</name><value><int>0</int></value></member><member><name>faultString</name><value>could not parse request</value></member></struct></value></fault></methodResponse>\n", $server->handle("no valid xml here"));
     }
 }
