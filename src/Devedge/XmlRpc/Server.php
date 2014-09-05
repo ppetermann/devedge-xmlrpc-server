@@ -2,6 +2,7 @@
 namespace Devedge\XmlRpc;
 
 use Devedge\Log\NoLog\NoLog;
+use Devedge\XmlRpc\Server\HandlerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
