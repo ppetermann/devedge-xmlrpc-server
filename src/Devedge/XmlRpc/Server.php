@@ -1,5 +1,5 @@
 <?php
-namespace Devedge\XmlRpc\Server;
+namespace Devedge\XmlRpc;
 
 use Devedge\Log\NoLog\NoLog;
 use Psr\Log\LoggerAwareInterface;
@@ -55,7 +55,8 @@ class Server implements LoggerAwareInterface
      */
     public function handle($request)
     {
-        if (!($simpleXml = simplexml_load_string($request))) {
+        // surpressing warning, as we handle the error properly
+        if (!($simpleXml = @simplexml_load_string($request))) {
             $this->logger->error(sprintf('could not parse request: %s', $request));
             return $this->handleError(new \Exception("could not parse request"));
         }
@@ -92,8 +93,8 @@ class Server implements LoggerAwareInterface
         $member->addChild("value")->addChild("int", $e->getCode());
 
         $member = $struct->addChild("member");
-        $member->addChild("name", "faultCode");
-        $member->addChild("value", $e->getCode());
+        $member->addChild("name", "faultString");
+        $member->addChild("value", $e->getMessage());
 
         return $response->asXML();
     }
