@@ -9,9 +9,10 @@
         }
     ],
     "require": {
+        "psr/log": "1.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.0.*"
+        "phpunit/phpunit": "~4.2"
     },
     "support": {
         "issues": "https://github.com/ppetermann/xmlrpc-server/issues"
