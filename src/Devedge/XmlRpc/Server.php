@@ -2,6 +2,7 @@
 namespace Devedge\XmlRpc;
 
 use Devedge\Log\NoLog\NoLog;
+use Devedge\XmlRpc\Common\XmlRpcBuilder;
 use Devedge\XmlRpc\Server\HandlerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -62,6 +63,12 @@ class Server implements LoggerAwareInterface
             return $this->handleError(new \Exception("could not parse request"));
         }
 
+        // we catch all exceptions that can happen during handling, and use handle error on 'em
+        try {
+
+        } catch (\Exception $e) {
+            return $this->handleError($e);
+        }
         return "";
     }
 
@@ -75,7 +82,7 @@ class Server implements LoggerAwareInterface
         if ($this->exceptionOnError) {
             throw $e;
         } else {
-            return $this->exceptionToResponse($e);
+            return $this->exceptionToFaultResponse($e);
         }
     }
 
@@ -84,19 +91,8 @@ class Server implements LoggerAwareInterface
      * @param \Exception $e
      * @return string
      */
-    private function exceptionToResponse(\Exception $e)
+    private function exceptionToFaultResponse(\Exception $e)
     {
-        $response = new \SimpleXMLElement("<methodResponse></methodResponse>");
-        $struct = $response->addChild("fault")->addChild("value")->addChild("struct");
-
-        $member = $struct->addChild("member");
-        $member->addChild("name", "faultCode");
-        $member->addChild("value")->addChild("int", $e->getCode());
-
-        $member = $struct->addChild("member");
-        $member->addChild("name", "faultString");
-        $member->addChild("value", $e->getMessage());
-
-        return $response->asXML();
+        return XmlRpcBuilder::createFault($e->getCode(), $e->getMessage());
     }
 }
