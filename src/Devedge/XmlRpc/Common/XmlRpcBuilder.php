@@ -9,7 +9,7 @@ class XmlRpcBuilder
      * @param string $message
      * @return string
      */
-    static public function createFault($code, $message)
+    public static function createFault($code, $message)
     {
         $response = new \SimpleXMLElement("<methodResponse></methodResponse>");
         $struct = $response->addChild("fault")->addChild("value")->addChild("struct");
@@ -25,12 +25,23 @@ class XmlRpcBuilder
         return $response->asXML();
     }
 
+    public static function createResponse($data)
+    {
+        $response = new \SimpleXMLElement("<methodResponse></methodResponse>");
+        $params = $response->addChild("params");
+        $param = $params->addChild("param");
+        $data = static::typeByGuess($data);
+        $param->addChild($data->getName());
+        $param->{$data->getName()} = $data;
+        return $response->asXML();
+    }
+
     /**
      * @param mixed $value
      * @throws \Exception
      * @return \SimpleXmlElement
      */
-    static public function typeByGuess($value)
+    public static function typeByGuess($value)
     {
         switch(true) {
             case is_int($value):
@@ -68,7 +79,7 @@ class XmlRpcBuilder
      * @param array $input
      * @return \SimpleXMLElement
      */
-    static public function createArray(array $input)
+    public static function createArray(array $input)
     {
         $array = simplexml_load_string("<array></array>");
         $array->addChild("data");
@@ -89,7 +100,7 @@ class XmlRpcBuilder
      * @param string $value
      * @return \SimpleXMLElement
      */
-    static public function createBase64($value)
+    public static function createBase64($value)
     {
         return simplexml_load_string("<base64>$value</base64>");
     }
@@ -98,14 +109,14 @@ class XmlRpcBuilder
      * @param boolean $value
      * @return \SimpleXMLElement
      */
-    static public function createBoolean($value)
+    public static function createBoolean($value)
     {
         $value = (int) $value;
         return simplexml_load_string("<boolean>$value</boolean>");
     }
 
 
-    static public function createDateTimeIso8601(\DateTime $dateTime)
+    public static function createDateTimeIso8601(\DateTime $dateTime)
     {
         $value = $dateTime->format(\DateTime::ISO8601);
         return simplexml_load_string("<dateTime.iso8601>$value</dateTime.iso8601>");
@@ -116,7 +127,7 @@ class XmlRpcBuilder
      * @param double $value
      * @return \SimpleXMLElement
      */
-    static public function createDouble($value)
+    public static function createDouble($value)
     {
         return simplexml_load_string("<double>$value</double>");
     }
@@ -125,7 +136,7 @@ class XmlRpcBuilder
      * @param int $value
      * @return \SimpleXMLElement
      */
-    static public function createInt($value)
+    public static function createInt($value)
     {
         return simplexml_load_string("<int>$value</int>");
     }
@@ -134,7 +145,7 @@ class XmlRpcBuilder
      * @param string $value
      * @return \SimpleXMLElement
      */
-    static public function createString($value)
+    public static function createString($value)
     {
         return simplexml_load_string("<string>$value</string>");
     }
@@ -144,7 +155,7 @@ class XmlRpcBuilder
      * @return \SimpleXMLElement
      * @throws \Exception
      */
-    static public function createStruct(array $input)
+    public static function createStruct(array $input)
     {
         $struct = simplexml_load_string("<struct></struct>");
         foreach($input as $key => $val)
@@ -161,7 +172,7 @@ class XmlRpcBuilder
      * this is not standard xml-rpc, but an extension
      * @see http://ontosys.com/xml-rpc/extensions.php
      */
-    static public function createNil()
+    public static function createNil()
     {
         return simplexml_load_string("<nil />");
     }
@@ -171,7 +182,7 @@ class XmlRpcBuilder
      * @param array $value
      * @return bool
      */
-    static protected function isAssoc(array $value)
+    protected static function isAssoc(array $value)
     {
         $array = array_keys($value);
         return ($array !== array_keys($array));
