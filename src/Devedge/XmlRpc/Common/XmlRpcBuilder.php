@@ -24,4 +24,156 @@ class XmlRpcBuilder
 
         return $response->asXML();
     }
+
+    /**
+     * @param mixed $value
+     * @throws \Exception
+     * @return \SimpleXmlElement
+     */
+    static public function typeByGuess($value)
+    {
+        switch(true) {
+            case is_int($value):
+                return static::createInt($value);
+                break;
+            case is_string($value):
+                return static::createString($value);
+                break;
+            case is_array($value) && static::isAssoc($value):
+                return static::createStruct($value);
+                break;
+            case is_array($value) && !static::isAssoc($value):
+                return static::createArray($value);
+                break;
+            case is_bool($value):
+                return static::createBoolean($value);
+                break;
+            case is_float($value) || is_double($value) || is_real($value):
+                return static::createDouble($value);
+                break;
+            case is_object($value) && $value instanceof \DateTime:
+                return static::createDateTimeIso8601($value);
+            case is_null($value):
+                // @todo check if extension is enabled, we might want to behave differently
+                // if it isn't
+                return static::createNil();
+                break;
+            default:
+                throw new \Exception(sprintf('don\'t know how to serialize: %s', gettype($value)));
+
+        }
+    }
+
+    /**
+     * @param array $input
+     * @return \SimpleXMLElement
+     */
+    static public function createArray(array $input)
+    {
+        $array = simplexml_load_string("<array></array>");
+        $array->addChild("data");
+        foreach($input as $value) {
+
+            $value = static::typeByGuess($value);
+
+            $valxml = simplexml_load_string("<value></value>");
+            $valxml->addChild($value->getName());
+            $valxml->{$value->getName()} =$value;
+
+            $array->{"data"}[] = $valxml;
+        }
+        return $array;
+    }
+
+    /**
+     * @param string $value
+     * @return \SimpleXMLElement
+     */
+    static public function createBase64($value)
+    {
+        return simplexml_load_string("<base64>$value</base64>");
+    }
+
+    /**
+     * @param boolean $value
+     * @return \SimpleXMLElement
+     */
+    static public function createBoolean($value)
+    {
+        $value = (int) $value;
+        return simplexml_load_string("<boolean>$value</boolean>");
+    }
+
+
+    static public function createDateTimeIso8601(\DateTime $dateTime)
+    {
+        $value = $dateTime->format(\DateTime::ISO8601);
+        return simplexml_load_string("<dateTime.iso8601>$value</dateTime.iso8601>");
+
+    }
+
+    /**
+     * @param double $value
+     * @return \SimpleXMLElement
+     */
+    static public function createDouble($value)
+    {
+        return simplexml_load_string("<double>$value</double>");
+    }
+
+    /**
+     * @param int $value
+     * @return \SimpleXMLElement
+     */
+    static public function createInt($value)
+    {
+        return simplexml_load_string("<int>$value</int>");
+    }
+
+    /**
+     * @param string $value
+     * @return \SimpleXMLElement
+     */
+    static public function createString($value)
+    {
+        return simplexml_load_string("<string>$value</string>");
+    }
+
+    /**
+     * @param array $input
+     * @return \SimpleXMLElement
+     * @throws \Exception
+     */
+    static public function createStruct(array $input)
+    {
+        $struct = simplexml_load_string("<struct></struct>");
+        foreach($input as $key => $val)
+        {
+            $member = $struct->addChild("member");
+            $member->addChild("name", $key);
+            $member->addChild("value");
+            $member->{"value"} = static::typeByGuess($val);
+        }
+        return $struct;
+    }
+
+    /**
+     * this is not standard xml-rpc, but an extension
+     * @see http://ontosys.com/xml-rpc/extensions.php
+     */
+    static public function createNil()
+    {
+        return simplexml_load_string("<nil />");
+    }
+
+    /**
+     * simple check if array is associative, using the array keys
+     * @param array $value
+     * @return bool
+     */
+    static protected function isAssoc(array $value)
+    {
+        $array = array_keys($value);
+        return ($array !== array_keys($array));
+    }
 }
