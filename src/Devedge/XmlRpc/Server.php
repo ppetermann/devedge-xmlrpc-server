@@ -2,7 +2,7 @@
 namespace Devedge\XmlRpc;
 
 use Devedge\Log\NoLog\NoLog;
-use Devedge\XmlRpc\Common\XmlRpcBuilder;
+use Devedge\XmlRpc\Server\XmlRpcBuilder;
 use Devedge\XmlRpc\Server\HandlerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
