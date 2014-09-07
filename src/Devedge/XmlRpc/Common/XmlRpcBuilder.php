@@ -82,16 +82,12 @@ class XmlRpcBuilder
     public static function createArray(array $input)
     {
         $array = simplexml_load_string("<array></array>");
-        $array->addChild("data");
+        $data = $array->addChild("data");
         foreach($input as $value) {
-
+            $valxml = $data->addChild("value");
             $value = static::typeByGuess($value);
-
-            $valxml = simplexml_load_string("<value></value>");
             $valxml->addChild($value->getName());
             $valxml->{$value->getName()} =$value;
-
-            $array->{"data"}[] = $valxml;
         }
         return $array;
     }
