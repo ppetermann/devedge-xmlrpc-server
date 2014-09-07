@@ -5,6 +5,7 @@ class XmlRpcBuilder
 {
     /**
      * creates a xml-rpc fault
+     *
      * @param int $code
      * @param string $message
      * @return string
@@ -33,6 +34,7 @@ class XmlRpcBuilder
         $data = static::typeByGuess($data);
         $param->addChild($data->getName());
         $param->{$data->getName()} = $data;
+
         return $response->asXML();
     }
 
@@ -43,7 +45,7 @@ class XmlRpcBuilder
      */
     public static function typeByGuess($value)
     {
-        switch(true) {
+        switch (true) {
             case is_int($value):
                 return static::createInt($value);
                 break;
@@ -76,60 +78,6 @@ class XmlRpcBuilder
     }
 
     /**
-     * @param array $input
-     * @return \SimpleXMLElement
-     */
-    public static function createArray(array $input)
-    {
-        $array = simplexml_load_string("<array></array>");
-        $data = $array->addChild("data");
-        foreach($input as $value) {
-
-            $valxml = $data->addChild("value");
-            $value = static::typeByGuess($value);
-            $valxml->addChild($value->getName());
-            $valxml->{$value->getName()} =$value;
-        }
-        return $array;
-    }
-
-    /**
-     * @param string $value
-     * @return \SimpleXMLElement
-     */
-    public static function createBase64($value)
-    {
-        return simplexml_load_string("<base64>$value</base64>");
-    }
-
-    /**
-     * @param boolean $value
-     * @return \SimpleXMLElement
-     */
-    public static function createBoolean($value)
-    {
-        $value = (int) $value;
-        return simplexml_load_string("<boolean>$value</boolean>");
-    }
-
-
-    public static function createDateTimeIso8601(\DateTime $dateTime)
-    {
-        $value = $dateTime->format(\DateTime::ISO8601);
-        return simplexml_load_string("<dateTime.iso8601>$value</dateTime.iso8601>");
-
-    }
-
-    /**
-     * @param double $value
-     * @return \SimpleXMLElement
-     */
-    public static function createDouble($value)
-    {
-        return simplexml_load_string("<double>$value</double>");
-    }
-
-    /**
      * @param int $value
      * @return \SimpleXMLElement
      */
@@ -148,6 +96,19 @@ class XmlRpcBuilder
     }
 
     /**
+     * simple check if array is associative, using the array keys
+     *
+     * @param array $value
+     * @return bool
+     */
+    public static function isAssoc(array $value)
+    {
+        $array = array_keys($value);
+
+        return ($array !== array_keys($array));
+    }
+
+    /**
      * @param array $input
      * @return \SimpleXMLElement
      * @throws \Exception
@@ -155,19 +116,67 @@ class XmlRpcBuilder
     public static function createStruct(array $input)
     {
         $struct = simplexml_load_string("<struct></struct>");
-        foreach($input as $key => $val)
-        {
+        foreach ($input as $key => $val) {
             $member = $struct->addChild("member");
             $member->addChild("name", $key);
             $valxml = $member->addChild("value");
             $value = static::typeByGuess($val);
             $valxml->{$value->getName()} = $value;
         }
+
         return $struct;
     }
 
     /**
+     * @param array $input
+     * @return \SimpleXMLElement
+     */
+    public static function createArray(array $input)
+    {
+        $array = simplexml_load_string("<array></array>");
+        $data = $array->addChild("data");
+        foreach ($input as $value) {
+
+            $valxml = $data->addChild("value");
+            $value = static::typeByGuess($value);
+            $valxml->addChild($value->getName());
+            $valxml->{$value->getName()} = $value;
+        }
+
+        return $array;
+    }
+
+    /**
+     * @param boolean $value
+     * @return \SimpleXMLElement
+     */
+    public static function createBoolean($value)
+    {
+        $value = (int)$value;
+
+        return simplexml_load_string("<boolean>$value</boolean>");
+    }
+
+    /**
+     * @param double $value
+     * @return \SimpleXMLElement
+     */
+    public static function createDouble($value)
+    {
+        return simplexml_load_string("<double>$value</double>");
+    }
+
+    public static function createDateTimeIso8601(\DateTime $dateTime)
+    {
+        $value = $dateTime->format(\DateTime::ISO8601);
+
+        return simplexml_load_string("<dateTime.iso8601>$value</dateTime.iso8601>");
+
+    }
+
+    /**
      * this is not standard xml-rpc, but an extension
+     *
      * @see http://ontosys.com/xml-rpc/extensions.php
      */
     public static function createNil()
@@ -176,13 +185,11 @@ class XmlRpcBuilder
     }
 
     /**
-     * simple check if array is associative, using the array keys
-     * @param array $value
-     * @return bool
+     * @param string $value
+     * @return \SimpleXMLElement
      */
-    public static function isAssoc(array $value)
+    public static function createBase64($value)
     {
-        $array = array_keys($value);
-        return ($array !== array_keys($array));
+        return simplexml_load_string("<base64>$value</base64>");
     }
 }
