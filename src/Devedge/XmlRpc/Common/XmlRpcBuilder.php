@@ -84,6 +84,7 @@ class XmlRpcBuilder
         $array = simplexml_load_string("<array></array>");
         $data = $array->addChild("data");
         foreach($input as $value) {
+
             $valxml = $data->addChild("value");
             $value = static::typeByGuess($value);
             $valxml->addChild($value->getName());
@@ -158,8 +159,9 @@ class XmlRpcBuilder
         {
             $member = $struct->addChild("member");
             $member->addChild("name", $key);
-            $member->addChild("value");
-            $member->{"value"} = static::typeByGuess($val);
+            $valxml = $member->addChild("value");
+            $value = static::typeByGuess($val);
+            $valxml->{$value->getName()} = $value;
         }
         return $struct;
     }
@@ -178,7 +180,7 @@ class XmlRpcBuilder
      * @param array $value
      * @return bool
      */
-    protected static function isAssoc(array $value)
+    public static function isAssoc(array $value)
     {
         $array = array_keys($value);
         return ($array !== array_keys($array));
