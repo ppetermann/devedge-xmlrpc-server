@@ -47,6 +47,25 @@ class Servertest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(42, $testobject->testValue);
     }
+
+
+
+    public function testHandleRequestOfNonExistingMethod()
+    {
+        $server = new Server();
+        $testobject = new ServerTestObject();
+        $handler = new Server\Handlers\SimpleHandler($testobject);
+        $server->registerHandler($handler);
+
+        $this->assertEquals(
+            "<?xml version=\"1.0\"?>\n<methodResponse><fault><value><struct><member><name>faultCode</name><value><int>0</int></value></member><member><name>faultString</name><value>Method runTest2 does not exist</value></member></struct></value></fault></methodResponse>\n",
+            $server->handle(
+                "<?xml version=\"1.0\"?><methodCall><methodName>Devedge\\XmlRpc\\Server\\Handlers\\SimpleHandler.runTest2</methodName><params><param><value><i4>42</i4></value></param></params></methodCall>"
+            )
+        );
+    }
+
+
 }
 
 class ServerTestObject
