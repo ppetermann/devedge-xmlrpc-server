@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eebf6ba404f8d92d5c0f8bdd2687d074",
+    "hash": "d3a284ab7aa72133fe5b7ffa45b14afc",
     "packages": [
         {
             "name": "devedge/xmlrpc-common",
-            "version": "0.1.0",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ppetermann/devedge-xmlrpc-common.git",
-                "reference": "517f80083f2baac46acc7fd1f9d4ede6c6741d36"
+                "reference": "2b3713ff0dd2dee795c3d0f63b8ed07952e98fdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ppetermann/devedge-xmlrpc-common/zipball/517f80083f2baac46acc7fd1f9d4ede6c6741d36",
-                "reference": "517f80083f2baac46acc7fd1f9d4ede6c6741d36",
+                "url": "https://api.github.com/repos/ppetermann/devedge-xmlrpc-common/zipball/2b3713ff0dd2dee795c3d0f63b8ed07952e98fdf",
+                "reference": "2b3713ff0dd2dee795c3d0f63b8ed07952e98fdf",
                 "shasum": ""
             },
             "require-dev": {
@@ -40,7 +40,7 @@
                 }
             ],
             "description": "lib to be used by devedge/xmlrpc-server and devedge/xmlrpc-client",
-            "time": "2014-09-07 21:07:46"
+            "time": "2014-09-07 22:01:36"
         },
         {
             "name": "psr/log",

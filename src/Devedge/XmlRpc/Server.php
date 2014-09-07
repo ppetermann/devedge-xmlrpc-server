@@ -2,6 +2,7 @@
 namespace Devedge\XmlRpc;
 
 use Devedge\Log\NoLog\NoLog;
+use Devedge\XmlRpc\Common\XmlRpcParser;
 use Devedge\XmlRpc\Server\XmlRpcBuilder;
 use Devedge\XmlRpc\Server\HandlerInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -25,6 +26,7 @@ class Server implements LoggerAwareInterface
      */
     public $exceptionOnError = false;
 
+    /** @var HandlerInterface[]  */
     protected $handlers = [];
 
     /**
@@ -65,11 +67,17 @@ class Server implements LoggerAwareInterface
 
         // we catch all exceptions that can happen during handling, and use handle error on 'em
         try {
-
+            list($namespace, $methodName) = explode(".", (string) $simpleXml->methodName);
+            $response = XmlRpcBuilder::createResponse(
+                $this->handlers[$namespace]->handle(
+                    $methodName,
+                    XmlRpcParser::parseParams($simpleXml->params)
+                )
+            );
         } catch (\Exception $e) {
             return $this->handleError($e);
         }
-        return "";
+        return $response;
     }
 
     /**
