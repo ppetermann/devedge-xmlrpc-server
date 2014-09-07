@@ -36,5 +36,5 @@ master:
             format: semantic
             dump-commits: true
         update-version-class:
-            class: src/Devedge/XmlRpc/Server/Server.php
+            class: src/Devedge/XmlRpc/Server.php
         vcs-commit: ~              # Commit the CHANGELOG
