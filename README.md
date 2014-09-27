@@ -2,7 +2,7 @@
 A library to provide services through xml-rpc
 
 ## License
-MIT Style
+MIT Style, see LICENSE.txt
 
 ## Notes
 currently this requires the current Psr DRAFT for a caching standard, this is supposed to be replaced by using
