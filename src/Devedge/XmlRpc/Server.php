@@ -44,9 +44,11 @@ class Server implements LoggerAwareInterface
      */
     public function handle($request)
     {
+        $oldErrorStatus = libxml_use_internal_errors(true);
         // surpressing warning, as we handle the error properly
-        if (!($simpleXml = @simplexml_load_string($request))) {
+        if (!($simpleXml = simplexml_load_string($request))) {
             $this->getLogger()->error(sprintf('could not parse request: %s', $request));
+            libxml_use_internal_errors($oldErrorStatus);
             return $this->handleError(new \Exception("could not parse request"));
         }
 
@@ -62,8 +64,11 @@ class Server implements LoggerAwareInterface
             );
         } catch (\Exception $e) {
             $this->getLogger()->error(sprintf('an exception occured during execution: %s', $e->getMessage()));
+            libxml_use_internal_errors($oldErrorStatus);
             return $this->handleError($e);
         }
+
+        libxml_use_internal_errors($oldErrorStatus);
         return $response;
     }
 
