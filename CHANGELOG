@@ -3,4 +3,11 @@ VERSION 0  FIRST DEV RELEASE, DON'T USE
 =======================================
 
    Version 0.1 - first dev release, don't use
+      01/11/2014 23:00  0.1.1  bugfix release
+         d26f9bc fixes problem with missing <value> in return
+         d50b656 adding security check to rmt config
+         910d124 minor fixes
+         ea3ebd5 license information
+         06881bf cleaning up dependencies
+         648e137 test call of non existing method
       08/09/2014 00:26  0.1.0  initial release
