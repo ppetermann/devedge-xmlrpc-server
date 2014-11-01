@@ -23,7 +23,7 @@ class XmlRpcBuilderTest extends PHPUnit_Framework_TestCase
     {
         // we test with int, as if one works others work too.
         $this->assertEquals(
-            "<?xml version=\"1.0\"?>\n<methodResponse><params><param><int>1</int></param></params></methodResponse>\n",
+            "<?xml version=\"1.0\"?>\n<methodResponse><params><param><value><int>1</int></value></param></params></methodResponse>\n",
             XmlRpcBuilder::createResponse(1)
         );
     }

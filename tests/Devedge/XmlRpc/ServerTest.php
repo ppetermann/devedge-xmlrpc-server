@@ -40,7 +40,7 @@ class Servertest extends PHPUnit_Framework_TestCase
         $this->assertEquals(["runTest1"], $handler->getMethods());
 
         $this->assertEquals(
-            "<?xml version=\"1.0\"?>\n<methodResponse><params><param><boolean>1</boolean></param></params></methodResponse>\n",
+            "<?xml version=\"1.0\"?>\n<methodResponse><params><param><value><boolean>1</boolean></value></param></params></methodResponse>\n",
             $server->handle(
                 "<?xml version=\"1.0\"?><methodCall><methodName>Devedge\\XmlRpc\\Server\\Handlers\\SimpleHandler.runTest1</methodName><params><param><value><i4>42</i4></value></param></params></methodCall>"
             )

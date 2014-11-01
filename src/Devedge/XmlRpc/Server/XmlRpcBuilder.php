@@ -31,9 +31,10 @@ class XmlRpcBuilder extends \Devedge\XmlRpc\Common\XmlRpcBuilder
         $response = new \SimpleXMLElement("<methodResponse></methodResponse>");
         $params = $response->addChild("params");
         $param = $params->addChild("param");
+        $value = $param->addChild("value");
         $data = static::typeByGuess($data);
-        $param->addChild($data->getName());
-        $param->{$data->getName()} = $data;
+        $value->addChild($data->getName());
+        $value->{$data->getName()} = $data;
 
         return $response->asXML();
     }
