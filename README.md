@@ -1,5 +1,6 @@
 # devedge/xmlrpc-server
 [![Latest Stable Version](https://poser.pugx.org/devedge/xmlrpc-server/v/stable.png)](https://packagist.org/packages/devedge/xmlrpc-server)
+[![License](https://poser.pugx.org/devedge/xmlrpc-server/license.png)](https://packagist.org/packages/devedge/xmlrpc-server)
 [![Total Downloads](https://poser.pugx.org/devedge/xmlrpc-server/downloads.png)](https://packagist.org/packages/devedge/xmlrpc-server)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ppetermann/devedge-xmlrpc-server/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ppetermann/devedge-xmlrpc-server/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/ppetermann/devedge-xmlrpc-server/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ppetermann/devedge-xmlrpc-server/?branch=master)
