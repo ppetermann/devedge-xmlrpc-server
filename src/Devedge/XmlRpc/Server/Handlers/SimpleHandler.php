@@ -45,9 +45,9 @@ class SimpleHandler implements HandlerInterface
             if (
                 $method->isPublic() // only public
                 && !$method->isStatic() // no static
-                && substr($method->getName(), 0, 2) != '__' // no magic
+                && substr($method->name, 0, 2) != '__' // no magic
             ){
-                $methods[] = $method->getName();
+                $methods[] = $method->name;
             }
 
         }
