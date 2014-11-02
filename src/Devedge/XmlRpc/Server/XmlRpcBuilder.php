@@ -37,9 +37,9 @@ class XmlRpcBuilder extends \Devedge\XmlRpc\Common\XmlRpcBuilder
         $params = $response->addChild("params");
         $param = $params->addChild("param");
         $value = $param->addChild("value");
-        $data = static::typeByGuess($data);
-        $value->addChild($data->getName());
-        $value->{$data->getName()} = $data;
+        $dataElement = static::typeByGuess($data);
+        $value->addChild($dataElement->getName());
+        $value->{$data->getName()} = $dataElement;
 
         return $response->asXML();
     }
