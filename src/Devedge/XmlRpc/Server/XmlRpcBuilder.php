@@ -26,6 +26,11 @@ class XmlRpcBuilder extends \Devedge\XmlRpc\Common\XmlRpcBuilder
         return $response->asXML();
     }
 
+    /**
+     * @param mixed $data
+     * @return string
+     * @throws \Exception
+     */
     public static function createResponse($data)
     {
         $response = new \SimpleXMLElement("<methodResponse></methodResponse>");
